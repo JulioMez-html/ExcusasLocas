@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Excusas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #2c2c2c;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f0f0f0;
+        }
+
+        .header {
+            background-color: #3a3a3a;
+            color: #f0f0f0;
+            padding: 20px 40px;
+            margin-top: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .generator-box {
+            background-color: #444;
+            padding: 30px;
+            margin-top: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            width: 350px;
+            text-align: center;
+        }
+
+        select, button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 8px;
+            border: none;
+            width: 100%;
+        }
+
+        select {
+            background-color: #555;
+            color: #f0f0f0;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .animation-box {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #ccc;
+            min-height: 30px;
+        }
+
+        .excuse-box {
+            margin-top: 30px;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            width: 350px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Generador de Excusas</div>
+
+    <div class="generator-box">
+        <label for="category"><strong>Tipo de excusa</strong></label><br>
+        <select id="category">
+            <option value="escuela">🎓 Escuela</option>
+            <option value="trabajo">💼 Trabajo</option>
+            <option value="videojuegos">🎮 Videojuegos</option>
+            <option value="creativas">🧠 Creativas</option>
+            <option value="mascotas">🐱 Mascotas</option>
+        </select><br>
+        <button id="generateBtn">Generar excusa</button>
+        <div class="animation-box" id="animationBox"></div>
+    </div>
+
+    <div class="excuse-box" id="excuseOutput"></div>
+
+    <script>
+const excuses = {
+    escuela: [
+        "El perro se comió mi tarea… y luego el router.",
+        "Confundí la fecha de entrega con la del apocalipsis.",
+        "Mi lápiz USB se fue de intercambio estudiantil.",
+        "El profesor me dijo que lo hiciera, pero en otro universo.",
+        "Estaba estudiando… pero el sueño me ganó la batalla.",
+        "Mi cuaderno se convirtió en origami por accidente.",
+        "El aula fue invadida por patos ninja.",
+        "Estudié tanto que olvidé cómo escribir.",
+        "Mi mochila se fue a una dimensión alternativa.",
+        "El pizarrón me insultó y me fui ofendido."
+    ],
+    trabajo: [
+        "Mi computadora tuvo una reunión sin mí.",
+        "El Excel se rebeló y se convirtió en arte abstracto.",
+        "Estaba en una llamada… con mi conciencia.",
+        "El tráfico estaba tan lento como mi motivación.",
+        "Mi jefe me pidió creatividad, así que desaparecí.",
+        "Mi silla giratoria me hipnotizó.",
+        "El café me pidió una huelga de productividad.",
+        "El sistema operativo decidió tomar vacaciones.",
+        "Mi jefe me pidió silencio… así que no trabajé.",
+        "El aire acondicionado congeló mis ideas."
+    ],
+    videojuegos: [
+        "Estaba atrapado en una misión secundaria… muy secundaria.",
+        "Mi teclado se convirtió en un NPC.",
+        "El servidor cayó… junto con mi productividad.",
+        "Tenía que farmear reputación con los procrastinadores.",
+        "Mi personaje murió y necesitaba un duelo emocional.",
+        "Estaba en una raid interdimensional sin salida.",
+        "Mi joystick se volvió filósofo y me hizo reflexionar.",
+        "El juego me pidió que lo terminara… emocionalmente.",
+        "Mi avatar se rebeló y se fue a vivir su propia vida.",
+        "Estaba atrapado en un bug existencial."
+    ],
+    creativas: [
+        "Un agujero negro se tragó mi motivación.",
+        "Mi sombra se fue de vacaciones y me dejó sin ideas.",
+        "El universo me pidió una pausa dramática.",
+        "Mi reloj decidió vivir en otra línea temporal.",
+        "El código se volvió consciente y me pidió respeto.",
+        "El tiempo se dobló y me dejó en ayer.",
+        "Mi reflejo me pidió una conversación seria.",
+        "La gravedad decidió hacerme flotar lejos del deber.",
+        "El universo me dio un descanso cósmico.",
+        "Mi mente se fue a meditar con los árboles."
+    ],
+    mascotas: [
+        "Mi gato caminó sobre el teclado y envió un correo a Marte.",
+        "El perro escondió mi USB en el jardín.",
+        "La licuadora empezó a hablar y me distrajo.",
+        "Mi planta carnívora se comió el informe.",
+        "El refrigerador me retó a una batalla de lógica.",
+        "Mi gato organizó una fiesta sobre el teclado.",
+        "El perro me escondió los zapatos como venganza.",
+        "La lavadora me pidió ayuda para escapar.",
+        "El microondas me dio consejos de vida.",
+        "Mi pez me pidió que reconsiderara mis prioridades."
+    ]
+};
+
+        const steps = [
+    "Pensando excusa...",
+    "Girando engranajes...",
+    "Tubos conectados...",
+    "Descartando idea...",
+    "Consultando al oráculo...",
+    "Revisando excusas anteriores...",
+    "Leyendo revista...",
+    "Viendo los numeros de la loto...",
+    "Procrastinando...",
+    "Tomando una fiesta...",
+    "Pensando en una excusa para no generar excusas...",
+    "Viendo tiktoks...",
+    "Preocuparse por la excusa aun generada...",
+    "Preguntar por chepia...",
+    "Hacer todo a ultima hora...",
+    "Buscando excusa en Copilot...",
+    "¡Excusa lista!"
+];
+
+        document.getElementById("generateBtn").addEventListener("click", function() {
+            const category = document.getElementById("category").value;
+            const animationBox = document.getElementById("animationBox");
+            const excuseBox = document.getElementById("excuseOutput");
+
+            animationBox.textContent = "";
+            excuseBox.textContent = "";
+
+            let stepIndex = 0;
+
+            const interval = setInterval(() => {
+    animationBox.textContent = steps[stepIndex];
+    stepIndex++;
+
+    if (stepIndex === steps.length) {
+        clearInterval(interval);
+        const selected = excuses[category];
+        const randomExcuse = selected[Math.floor(Math.random() * selected.length)];
+        excuseBox.textContent = randomExcuse;
+    }
+}, 2000);
+
+        });
+    </script>
+
+</body>
+</html>
